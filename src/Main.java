@@ -1,3 +1,10 @@
+import data.PostgresDB;
+import data.IDB;
+import repositories.IUserRepository;
+import repositories.UserRepository;
+import controllers.UserController;
+import controllers.IUserController;
+
 public class Main {
 
     public static void main(String[] args) {
