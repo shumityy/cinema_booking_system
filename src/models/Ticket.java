@@ -1,11 +1,19 @@
 package models;
 
 public class Ticket extends Entity {
-    private int quantity;
+    private int seatId;
     private double price;
 
-    public Ticket() {
-
+    public Ticket(int seatId, double price) {
+        this.seatId = seatId;
+        this.price = price;
     }
 
+    public int getSeatId() {
+        return seatId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
 }

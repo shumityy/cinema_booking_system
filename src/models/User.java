@@ -1,10 +1,30 @@
 package models;
 
-public class User extends Entity{
-    private int id;
+public class User extends Entity {
     private String name;
     private String surname;
-    private String email;
 
+    public User(int id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+    }
 
+    public User(String name, String surname) {
+        this.name = name;
+        this.surname = surname;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + surname;
+    }
 }
