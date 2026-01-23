@@ -1,81 +1,98 @@
-import controllers.IUserController;
-import repositories.SeatRepository;
-import repositories.TicketRepository;
-import models.Seat;
-import models.Ticket;
-
-import java.util.List;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import controllers.interfaces.IFilmController;
+import controllers.interfaces.IUserController;
+import menus.FilmMenu;
+import models.User;
+
+
 public class MyApplication {
-
-    private final IUserController userController;
-    private final SeatRepository seatRepo;
-    private final TicketRepository ticketRepo;
-
     private final Scanner scanner = new Scanner(System.in);
 
-    public MyApplication(
-            IUserController userController,
-            SeatRepository seatRepo,
-            TicketRepository ticketRepo
-    ) {
+    private final IUserController userController;
+    private final IFilmController filmController;
+
+    public MyApplication(IUserController userController, IFilmController filmController) {
         this.userController = userController;
-        this.seatRepo = seatRepo;
-        this.ticketRepo = ticketRepo;
+        this.filmController = filmController;
+    }
+
+    private void mainMenu() {
+        System.out.println();
+        System.out.println("Welcome to My Application");
+        System.out.println("Select option:");
+        System.out.println("1. Get all users");
+        System.out.println("2. Get user by id");
+        System.out.println("3. Create user");
+        System.out.println("4. Login");
+        System.out.println("0. Exit");
+        System.out.println();
+        System.out.print("Enter option (1-4): ");
     }
 
     public void start() {
+        while (true) {
+            mainMenu();
+            try {
+                int option = scanner.nextInt();
 
-        System.out.println(" Welcome to Cinema Booking System");
-        System.out.println("---------------------------------");
-
-        // Registration
-        userController.register();
-
-        // Theatre / Hall selection (simplified)
-        int hallId = 1; // fixed hall for demo (DB already has it)
-
-        System.out.println("\n Hall " + hallId);
-        System.out.println("Seats:");
-
-        List<Seat> seats = seatRepo.getSeatsByHall(hallId);
-
-        // Visual layout
-        for (Seat seat : seats) {
-            String status = seat.isBooked() ? "[X]" : "[ ]";
-            System.out.printf("%2d %s  ", seat.getSeatNumber(), status);
-
-            if (seat.getSeatNumber() % 4 == 0) {
-                System.out.println();
+                switch (option) {
+                    case 1: getAllUsersMenu(); break;
+                    case 2: getUserByIdMenu(); break;
+                    case 3: createUserMenu(); break;
+                    case 4: loginMenu(); break;
+                    default: return;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Input must be integer: " + e);
+                scanner.nextLine(); // to ignore incorrect input
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
+
+            System.out.println("*************************");
         }
+    }
 
-        System.out.println("\n\nChoose seat number:");
-        int seatNumber = scanner.nextInt();
+    public void getAllUsersMenu() {
+        String response = userController.getAllUsers();
+        System.out.println(response);
+    }
 
-        Seat chosenSeat = seats.stream()
-                .filter(s -> s.getSeatNumber() == seatNumber)
-                .findFirst()
-                .orElse(null);
+    public void getUserByIdMenu() {
+        System.out.println("Please enter id");
 
-        if (chosenSeat == null) {
-            System.out.println(" Invalid seat.");
+        int id = scanner.nextInt();
+        String response = userController.getUser(id);
+        System.out.println(response);
+    }
+
+    public void createUserMenu() {
+        System.out.println("Please enter username");
+        String name = scanner.next();
+        System.out.println("Please enter password");
+        String surname = scanner.next();
+
+        String response = userController.createUser(name, surname);
+        System.out.println(response);
+    }
+    public void loginMenu() {
+        System.out.println("Please enter name:");
+        String name = scanner.next();
+
+        System.out.println("Please enter surname:");
+        String surname = scanner.next();
+
+        User user = userController.login(name, surname);
+
+        if (user == null) {
+            System.out.println("Login failed. User not found.");
             return;
         }
 
-        if (chosenSeat.isBooked()) {
-            System.out.println(" Seat already booked!");
-            return;
-        }
-
-        Ticket ticket = new Ticket(chosenSeat.getId(), 6.0);
-        ticketRepo.create(ticket);
-        seatRepo.bookSeat(chosenSeat.getId());
-
-        System.out.println("\n Ticket purchased successfully!");
-        System.out.println("Hall: " + hallId);
-        System.out.println("Seat: " + chosenSeat.getSeatNumber());
-        System.out.println("Price: $6.0");
+        System.out.println("Login successful!");
+        FilmMenu filmMenu = new FilmMenu(user, filmController);
+        filmMenu.start();
     }
 }

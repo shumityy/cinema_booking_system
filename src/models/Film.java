@@ -1,6 +1,7 @@
 package models;
 
-public class Film extends Entity {
+public class Film {
+    private int id;
     private String title;
     private int duration;
     private String schedule;
@@ -26,5 +27,10 @@ public class Film extends Entity {
 
     public String getSchedule() {
         return schedule;
+    }
+
+    @Override
+    public String toString() {
+        return title + " " + duration;
     }
 }

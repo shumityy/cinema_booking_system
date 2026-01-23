@@ -1,31 +1,54 @@
 package models;
 
-public class User extends Entity{
-    private String name;
-    private String surname;
+public class User {
+    private int id;
+    private String username;
+    private String password;
 
-    public User(int id, String name, String surname) {
+    public User() {
+
+    }
+
+    public User(String name, String password) {
+        setName(name);
+        setSurname(password);
+    }
+
+    public User(int id, String name, String password) {
+        this(name, password);
+        setId(id);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
         this.id = id;
-        this.name = name;
-        this.surname = surname;
     }
 
-    public User(String name, String surname) {
-        this.name = name;
-        this.surname = surname;
+    public String getUsername() {
+        return username;
     }
 
-    public String getName() {
-        return name;
+    public void setName(String username) {
+        this.username = username;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getPassword() {
+        return password;
     }
+
+    public void setSurname(String password) {
+        this.password = password;
+    }
+
 
     @Override
     public String toString() {
-        return name + " " + surname;
+        return "User{" +
+                "id=" + id +
+                ", name='" + username + '\'' +
+                ", surname='" + password + "'";
     }
-
 }

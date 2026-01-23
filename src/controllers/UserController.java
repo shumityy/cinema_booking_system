@@ -1,30 +1,44 @@
 package controllers;
 
+import controllers.interfaces.IUserController;
 import models.User;
-import repositories.IUserRepository;
+import repositories.interfaces.IUserRepository;
 
-import java.util.Scanner;
+import java.util.List;
 
 public class UserController implements IUserController {
-
     private final IUserRepository repo;
-    private final Scanner scanner = new Scanner(System.in);
 
-    public UserController(IUserRepository repo) {
+    public UserController(IUserRepository repo) { // Dependency Injection
         this.repo = repo;
     }
 
-    @Override
-    public void register() {
-        System.out.print("Enter name: ");
-        String name = scanner.nextLine();
+    public String createUser(String username, String password){
+        User user = new User(username, password);
 
-        System.out.print("Enter surname: ");
-        String surname = scanner.nextLine();
+        boolean created = repo.createUser(user);
 
-        User user = new User(name, surname);
-        repo.create(user);
+        return (created ? "User was created!" : "User creation was failed!");
+    }
 
-        System.out.println(" User registered successfully!");
+    public String getUser(int id) {
+        User user = repo.getUser(id);
+
+        return (user == null ? "User was not found!" : user.toString());
+    }
+
+    public String getAllUsers() {
+        List<User> users = repo.getAllUsers();
+
+        StringBuilder response = new StringBuilder();
+        for (User user : users) {
+            response.append(user.toString()).append("\n");
+        }
+
+        return response.toString();
+    }
+
+    public User login(String name, String surname) {
+        return repo.login(name, surname);
     }
 }
