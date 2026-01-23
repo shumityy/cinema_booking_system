@@ -1,6 +1,6 @@
 package models;
 
-public class User extends Entity {
+public class User implements Entity{
     private String name;
     private String surname;
 
@@ -27,4 +27,5 @@ public class User extends Entity {
     public String toString() {
         return name + " " + surname;
     }
+
 }

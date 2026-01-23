@@ -3,6 +3,7 @@ package models;
 public class Film extends Entity {
     private String title;
     private int duration;
+    private String schedule;
 
     public Film(int id, String title, int duration) {
         this.id = id;
