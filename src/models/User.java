@@ -1,6 +1,6 @@
 package models;
 
-public class User implements Entity{
+public class User extends Entity{
     private String name;
     private String surname;
 

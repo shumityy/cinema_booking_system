@@ -1,27 +1,28 @@
-import data.PostgresDB;
-import data.IDB;
-import repositories.*;
 import controllers.*;
+import data.*;
+import repositories.*;
 
 public class Main {
+
     public static void main(String[] args) {
 
-        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "0000", "somedb"
+        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "password",
+                "cinema"
         );
 
         IUserRepository userRepo = new UserRepository(db);
-        IUserController userController = new UserController(userRepo);
-
         SeatRepository seatRepo = new SeatRepository(db);
         TicketRepository ticketRepo = new TicketRepository(db);
 
-        MyApplication app = new MyApplication(
-                userController,
-                seatRepo,
-                ticketRepo
-        );
+        UserController userController = new UserController(userRepo);
+        TicketController ticketController =
+                new TicketController(seatRepo, ticketRepo);
 
-        app.start();
+        System.out.println("🎬 Welcome to Cinema Booking System");
+
+        userController.register();
+        ticketController.buyTicket();
+
         db.close();
     }
 }
