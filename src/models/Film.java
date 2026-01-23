@@ -23,4 +23,8 @@ public class Film extends Entity {
     public int getDuration() {
         return duration;
     }
+
+    public String getSchedule() {
+        return schedule;
+    }
 }

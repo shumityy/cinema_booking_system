@@ -13,7 +13,15 @@ public class Ticket extends Entity {
         return seatId;
     }
 
+    public void setSeatId(int seatId){
+        this.seatId = seatId;
+    }
+
     public double getPrice() {
         return price;
+    }
+
+    public void setPrice(double price){
+        this.price = price;
     }
 }
