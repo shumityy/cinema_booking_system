@@ -45,6 +45,8 @@ public class FilmMenu {
         System.out.println();
         System.out.println("Enter option: ");
         int option = scanner.nextInt();
-        System.out.println("You bought a ticket of film" + controller.getFilm(option));
+        System.out.println("What seat you want (1-64): ");
+        int seat =  scanner.nextInt();
+        System.out.println("You bought a ticket of film" + controller.getFilm(option) + " seat: " + seat);
     }
 }
