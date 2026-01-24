@@ -16,7 +16,7 @@ public class UserController implements IUserController {
     public String register(String username, String password){
         User user = new User(username, password);
 
-        boolean created = repo.createUser(user);
+        boolean created = repo.register(user);
 
         return (created ? "User was created!" : "User creation was failed!");
     }
