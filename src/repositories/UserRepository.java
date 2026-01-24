@@ -16,7 +16,7 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public boolean createUser(User user) {
+    public boolean register(User user) {
         Connection con = null;
 
         try {

@@ -24,7 +24,7 @@ public class MyApplication {
         System.out.println("Select option:");
         //System.out.println("1. Get all users");
         //System.out.println("2. Get user by id");
-        System.out.println("1. Create user");
+        System.out.println("1. Register");
         System.out.println("2. Login");
         System.out.println("0. Exit");
         System.out.println();
@@ -40,7 +40,7 @@ public class MyApplication {
                 switch (option) {
                     //case 1: getAllUsersMenu(); break;
                     //case 2: getUserByIdMenu(); break;
-                    case 1: createUserMenu(); break;
+                    case 1: registerMenu(); break;
                     case 2: loginMenu(); break;
                     default: return;
                 }
@@ -68,23 +68,23 @@ public class MyApplication {
         System.out.println(response);
     }
 
-    public void createUserMenu() {
+    public void registerMenu() {
         System.out.println("Please enter username");
-        String name = scanner.next();
+        String username = scanner.next();
         System.out.println("Please enter password");
-        String surname = scanner.next();
+        String password = scanner.next();
 
-        String response = userController.createUser(name, surname);
+        String response = userController.register(username, password);
         System.out.println(response);
     }
     public void loginMenu() {
-        System.out.println("Please enter name:");
-        String name = scanner.next();
+        System.out.println("Please enter username:");
+        String username = scanner.next();
 
-        System.out.println("Please enter surname:");
-        String surname = scanner.next();
+        System.out.println("Please enter password:");
+        String password = scanner.next();
 
-        User user = userController.login(name, surname);
+        User user = userController.login(username, password);
 
         if (user == null) {
             System.out.println("Login failed. User not found.");
