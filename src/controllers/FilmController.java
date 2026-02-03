@@ -18,9 +18,9 @@ public class FilmController implements IFilmController {
         List<Film> films = repo.getAllFilms();
 
         StringBuilder response = new StringBuilder();
-        for (Film film : films) {
-            response.append(film.toString()).append("\n");
-        }
+        films.forEach(film ->
+                response.append(film.toString()).append("\n")
+        );
 
         return response.toString();
     }
