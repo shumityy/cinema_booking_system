@@ -7,25 +7,30 @@ public class User {
     private Role role;
 
     public User() {
-
+this.role = Role.USER;
     }
 
     public User(String name, String password) {
-        setName(name);
-        setSurname(password);
+        this.username = username;
+        this.password = password;
         this.role = Role.USER;
     }
 
-    public User(String name, String password, Role role) {
-        setName(name);
-        setSurname(password);
+    public User(int id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
         this.role = role;
     }
 
-    public User(int id, String name, String password, Role role) {
-        this(name, password, role);
-        setId(id);
+    public User(int id, String username, String password, Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
+
+
 
     public int getId() {
         return id;
