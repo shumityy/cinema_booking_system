@@ -1,6 +1,7 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import controllers.TicketController;
 import controllers.interfaces.IFilmController;
 import controllers.interfaces.IUserController;
 import menus.FilmMenu;
@@ -12,10 +13,12 @@ public class MyApplication {
 
     private final IUserController userController;
     private final IFilmController filmController;
+    private final TicketController ticketController;
 
-    public MyApplication(IUserController userController, IFilmController filmController) {
+    public MyApplication(IUserController userController, IFilmController filmController, TicketController ticketController) {
         this.userController = userController;
         this.filmController = filmController;
+        this.ticketController = ticketController;
     }
 
     private void mainMenu() {
@@ -92,7 +95,7 @@ public class MyApplication {
         }
 
         System.out.println("Login successful!");
-        FilmMenu filmMenu = new FilmMenu(user, filmController);
+        FilmMenu filmMenu = new FilmMenu(user, filmController, ticketController);
         filmMenu.start();
     }
 }

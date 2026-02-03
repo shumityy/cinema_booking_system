@@ -1,4 +1,7 @@
 import controllers.interfaces.IFilmController;
+import controllers.FilmController;
+import controllers.TicketController;
+import controllers.UserController;
 import controllers.interfaces.IUserController;
 import data.PostgresDB;
 import data.IDB;
@@ -15,8 +18,11 @@ public class Main {
         IFilmRepository filmRepo = new FilmRepository(db);
         IUserController userController = new UserController(userRepo);
         IFilmController filmController = new FilmController(filmRepo);
+        SeatRepository seatRepo = new SeatRepository(db);
+        TicketRepository ticketRepo = new TicketRepository(db);
+        TicketController ticketController = new TicketController(seatRepo, ticketRepo);
 
-        MyApplication app = new MyApplication(userController, filmController);
+        MyApplication app = new MyApplication(userController, filmController, ticketController);
 
         app.start();
 
