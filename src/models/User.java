@@ -31,7 +31,6 @@ this.role = Role.USER;
     }
 
 
-
     public int getId() {
         return id;
     }
