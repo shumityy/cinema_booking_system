@@ -21,8 +21,9 @@ public class UserMenu {
     private void menu() {
         System.out.println();
         System.out.println("Welcome, " + user.getUsername());
-        System.out.println("1. Select Movies");
-        System.out.println("2. Logout");
+        System.out.println("1. Select Films");
+        System.out.println("2. View Your Booking");
+        System.out.println("3. Logout");
         System.out.print("Enter option: ");
     }
 
@@ -34,6 +35,9 @@ public class UserMenu {
             switch (option) {
                 case 1:
                     moviesMenu();
+                    break;
+                case 2:
+                    bookingMenu();
                     break;
                 default:
                     System.out.println("Logged out.");
@@ -53,5 +57,9 @@ public class UserMenu {
         String response2 = bookingController.addBooking(user.getUsername(), controller.getFilm(option), 500);
         System.out.println(response2);
         System.out.println();
+    }
+    public void bookingMenu() {
+        String response = bookingController.getFullBooking();
+        System.out.println(response);
     }
 }

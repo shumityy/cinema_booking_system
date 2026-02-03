@@ -2,7 +2,9 @@ package repositories.interfaces;
 
 import models.Booking;
 
+import java.util.List;
+
 public interface IBookingRepository {
-    Booking getFullBooking(int id);
+    List<Booking> getFullBooking();
     boolean addBooking(Booking booking);
 }

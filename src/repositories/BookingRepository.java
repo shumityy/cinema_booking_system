@@ -5,11 +5,9 @@ import models.Booking;
 import models.Film;
 import models.User;
 import repositories.interfaces.IBookingRepository;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookingRepository implements IBookingRepository {
     private final IDB db;
@@ -18,28 +16,28 @@ public class BookingRepository implements IBookingRepository {
         this.db = db;
     }
 
-    public Booking getFullBooking(int booking_id) {
+    public List<Booking> getFullBooking() {
         Connection con = null;
         try {
             con = db.getConnection();
             String sql = """
                         SELECT b.id, u.username, f.title, b.total_price 
-                        FROM bookings u 
+                        FROM bookings b 
                         JOIN users u ON b.user_username = u.username
                         JOIN films f ON b.film_title= f.title
-                        WHERE b.id = ?
                         """;
-            PreparedStatement st = con.prepareStatement(sql);
-
-            st.setInt(1, booking_id);
-
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                return new Booking(rs.getInt("id"),
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            List<Booking> bookings = new ArrayList<>();
+            while (rs.next()) {
+                Booking booking = new Booking(rs.getInt("id"),
                         new User(rs.getString("username")),
                         new Film(rs.getString("title")),
                         rs.getDouble("total_price"));
+                bookings.add(booking);
             }
+            return bookings;
+
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
         }

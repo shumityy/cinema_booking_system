@@ -64,7 +64,7 @@ public class FilmRepository implements IFilmRepository {
         return null;
     }
     //FOR ADMIN
-    public void addFilm(String title, int duration, int categoryId) {
+    public void addFilm(String title, int duration) {
 
         Connection con = null;
         try {
@@ -74,7 +74,6 @@ public class FilmRepository implements IFilmRepository {
 
             ps.setString(1, title);
             ps.setInt(2, duration);
-            ps.setInt(3, categoryId);
 
             ps.executeUpdate();
         } catch (Exception e) {
