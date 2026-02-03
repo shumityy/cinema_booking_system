@@ -1,18 +1,21 @@
 package menus;
 
+import controllers.interfaces.IBookingController;
 import controllers.interfaces.IFilmController;
 import models.User;
 import java.util.Scanner;
 
 
-public class FilmMenu {
+public class UserMenu {
     private final Scanner scanner = new Scanner(System.in);
     private final User user;
     private final IFilmController controller;
+    private final IBookingController bookingController;
 
-    public FilmMenu(User user, IFilmController controller) {
+    public UserMenu(User user, IFilmController controller, IBookingController bookingController) {
         this.user = user;
         this.controller = controller;
+        this.bookingController = bookingController;
     }
 
     private void menu() {
@@ -40,13 +43,15 @@ public class FilmMenu {
     }
     public void moviesMenu() {
         System.out.println("Which film would you like to watch?: ");
-        String response = controller.getAllFilms();
-        System.out.println(response);
+        String response1 = controller.getAllFilms();
+        System.out.println(response1);
         System.out.println();
         System.out.println("Enter option: ");
         int option = scanner.nextInt();
         System.out.println("What seat you want (1-64): ");
         int seat =  scanner.nextInt();
-        System.out.println("You bought a ticket of film" + controller.getFilm(option) + " seat: " + seat);
+        String response2 = bookingController.addBooking(user.getUsername(), controller.getFilm(option), 500);
+        System.out.println(response2);
+        System.out.println();
     }
 }
