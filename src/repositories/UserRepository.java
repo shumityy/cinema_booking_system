@@ -1,6 +1,7 @@
 package repositories;
 
 import data.IDB;
+import models.Role;
 import models.User;
 import repositories.interfaces.IUserRepository;
 
@@ -21,11 +22,12 @@ public class UserRepository implements IUserRepository {
 
         try {
             con = db.getConnection();
-            String sql = "INSERT INTO users(username,password) VALUES (?,?)";
+            String sql = "INSERT INTO users(username,password, role) VALUES (?,?,?)";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setString(1, user.getUsername());
             st.setString(2, user.getPassword());
+            st.setString(3, user.getRole().name());
 
             st.execute();
 
@@ -95,7 +97,7 @@ public class UserRepository implements IUserRepository {
 
         try {
             con = db.getConnection();
-            String sql = "SELECT id, username, password FROM users WHERE username=? AND password=?";
+            String sql = "SELECT id, username, password, role FROM users WHERE username=? AND password=?";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setString(1, username);
@@ -106,7 +108,8 @@ public class UserRepository implements IUserRepository {
                 return new User(
                         rs.getInt("id"),
                         rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role"))
                 );
             }
         } catch (SQLException e) {
