@@ -1,7 +1,6 @@
 package repositories.interfaces;
 
 import models.Film;
-
 import java.util.List;
 
 public interface IFilmRepository {
