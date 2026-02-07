@@ -21,10 +21,11 @@ public class BookingRepository implements IBookingRepository {
         try {
             con = db.getConnection();
             String sql = """
-                        SELECT b.id, u.username, f.title, b.total_price 
+                        SELECT b.id, u.username, f.title, s.seat_number, b.total_price
                         FROM bookings b 
                         JOIN users u ON b.user_username = u.username
                         JOIN films f ON b.film_title= f.title
+                        JOIN seats s ON b.seat_id = s.seat_number
                         """;
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -33,6 +34,7 @@ public class BookingRepository implements IBookingRepository {
                 Booking booking = new Booking(rs.getInt("id"),
                         new User(rs.getString("username")),
                         new Film(rs.getString("title")),
+                        rs.getInt("seat_id"),
                         rs.getDouble("total_price"));
                 bookings.add(booking);
             }
@@ -48,7 +50,7 @@ public class BookingRepository implements IBookingRepository {
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "INSERT INTO bookings(user_username,film_title, total_price) VALUES (?,?,?)";
+            String sql = "INSERT INTO bookings(user_username, film_title, seat_id, total_price) VALUES (?,?,?,?)";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setString(1, booking.getUser().getUsername());

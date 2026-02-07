@@ -1,6 +1,7 @@
 package repositories;
 
 import data.IDB;
+import models.Role;
 import models.User;
 import repositories.interfaces.IUserRepository;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserRepository implements IUserRepository {
-    private final IDB db;  // Dependency Injection
+    private final IDB db;
 
     public UserRepository(IDB db) {
         this.db = db;
@@ -21,11 +22,12 @@ public class UserRepository implements IUserRepository {
 
         try {
             con = db.getConnection();
-            String sql = "INSERT INTO users(username,password) VALUES (?,?)";
+            String sql = "INSERT INTO users(username,password, role) VALUES (?,?,?)";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setString(1, user.getUsername());
             st.setString(2, user.getPassword());
+            st.setString(3, user.getRole().name());
 
             st.execute();
 
@@ -43,7 +45,7 @@ public class UserRepository implements IUserRepository {
 
         try {
             con = db.getConnection();
-            String sql = "SELECT id,username,password FROM users WHERE id = ?";
+            String sql = "SELECT id,username,password,role FROM users WHERE id = ?";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, id);
@@ -52,7 +54,8 @@ public class UserRepository implements IUserRepository {
             if (rs.next()) {
                 return new User(rs.getInt("id"),
                         rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role"))
                 );
             }
         } catch (SQLException e) {
@@ -68,7 +71,7 @@ public class UserRepository implements IUserRepository {
 
         try {
             con = db.getConnection();
-            String sql = "SELECT id,username,password FROM users";
+            String sql = "SELECT id,username,password,role FROM users";
             Statement st = con.createStatement();
 
             ResultSet rs = st.executeQuery(sql);
@@ -76,7 +79,8 @@ public class UserRepository implements IUserRepository {
             while (rs.next()) {
                 User user = new User(rs.getInt("id"),
                         rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role"))
                 );
 
                 users.add(user);
@@ -95,7 +99,7 @@ public class UserRepository implements IUserRepository {
 
         try {
             con = db.getConnection();
-            String sql = "SELECT id, username, password FROM users WHERE username=? AND password=?";
+            String sql = "SELECT id, username, password, role FROM users WHERE username=? AND password=?";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setString(1, username);
@@ -106,7 +110,8 @@ public class UserRepository implements IUserRepository {
                 return new User(
                         rs.getInt("id"),
                         rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role"))
                 );
             }
         } catch (SQLException e) {
