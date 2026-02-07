@@ -21,9 +21,13 @@ public class UserMenu {
     private void menu() {
         System.out.println();
         System.out.println("Welcome, " + user.getUsername());
-        System.out.println("1. Select Films");
-        System.out.println("2. View Your Booking");
-        System.out.println("3. Logout");
+        System.out.println("1. Select Movies");
+        System.out.println("2. View Bookings");
+        if (user.isAdmin()) { System.out.println("3. Admin: Add new film");
+            System.out.println("4. Logout");
+        } else {
+            System.out.println("3. Logout");
+        }
         System.out.print("Enter option: ");
     }
 
@@ -38,13 +42,25 @@ public class UserMenu {
                     break;
                 case 2:
                     bookingMenu();
-                    break;
+                case 3:
+                    if (user.isAdmin()) {
+                        addFilmMenu();
+                        break;
+                    }
+                    System.out.println("Logged out.");
+                    return;
+
+                case 4:
+                    System.out.println("Logged out.");
+                    return;
+
                 default:
                     System.out.println("Logged out.");
                     return;
             }
         }
     }
+
     public void moviesMenu() {
         System.out.println("Which film would you like to watch?: ");
         String response1 = controller.getAllFilms();
@@ -52,14 +68,26 @@ public class UserMenu {
         System.out.println();
         System.out.println("Enter option: ");
         int option = scanner.nextInt();
-        System.out.println("What seat you want (1-64): ");
+        System.out.println("What seat you want: ");
         int seat =  scanner.nextInt();
-        String response2 = bookingController.addBooking(user.getUsername(), controller.getFilm(option), 500);
+        String response2 = bookingController.addBooking(user.getUsername(), controller.getFilm(option), 500, seat);
         System.out.println(response2);
         System.out.println();
     }
     public void bookingMenu() {
         String response = bookingController.getFullBooking();
         System.out.println(response);
+    }
+    private void addFilmMenu() {
+        scanner.nextLine(); // consume leftover newline
+
+        System.out.print("Film title: ");
+        String title = scanner.nextLine();
+
+        System.out.print("Duration (minutes): ");
+        int duration = scanner.nextInt();
+
+        String result = controller.addFilm(user, title, duration);
+        System.out.println(result);
     }
 }

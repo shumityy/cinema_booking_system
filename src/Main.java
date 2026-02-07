@@ -7,6 +7,7 @@ import repositories.*;
 import controllers.*;
 import repositories.interfaces.IBookingRepository;
 import repositories.interfaces.IFilmRepository;
+import repositories.interfaces.ISeatRepository;
 import repositories.interfaces.IUserRepository;
 
 public class Main {
@@ -16,9 +17,11 @@ public class Main {
         IUserRepository userRepo = new UserRepository(db);
         IFilmRepository filmRepo = new FilmRepository(db);
         IBookingRepository bookingRepo = new BookingRepository(db);
+        ISeatRepository seatRepo = new SeatRepository(db);
+
         IUserController userController = new UserController(userRepo);
         IFilmController filmController = new FilmController(filmRepo);
-        IBookingController bookingController = new BookingController(bookingRepo);
+        IBookingController bookingController = new BookingController(bookingRepo, seatRepo);
 
         MyApplication app = new MyApplication(userController, filmController, bookingController);
 

@@ -25,7 +25,7 @@ public class FilmRepository implements IFilmRepository {
             List<Film> films = new ArrayList<>();
             while (rs.next()) {
                 Film film = new Film(rs.getInt("id"),
-                        rs.getString("username"),
+                        rs.getString("title"),
                         rs.getInt("duration")
                 );
 
@@ -64,20 +64,23 @@ public class FilmRepository implements IFilmRepository {
         return null;
     }
     //FOR ADMIN
-    public void addFilm(String title, int duration) {
-
+    public boolean addFilm(Film film) {
         Connection con = null;
+
         try {
             con = db.getConnection();
-            String sql = "INSERT INTO film(title, duration) VALUES (?,?)";
-            PreparedStatement ps = con.prepareStatement(sql);
+            String sql = "INSERT INTO films(title, duration) VALUES (?, ?)";
+            PreparedStatement st = con.prepareStatement(sql);
 
-            ps.setString(1, title);
-            ps.setInt(2, duration);
+            st.setString(1, film.getTitle());
+            st.setInt(2, film.getDuration());
 
-            ps.executeUpdate();
-        } catch (Exception e) {
+            st.execute();
+            return true;
+
+        } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
+            return false;
         }
     }
 }

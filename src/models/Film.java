@@ -4,13 +4,17 @@ public class Film {
     private int id;
     private String title;
     private int duration;
-    private String category;
 
-    public Film(int id, String title, int duration) {
-        this.id = id;
+    public Film(String title, int duration) {
         this.title = title;
         this.duration = duration;
     }
+
+    public Film(int id, String title, int duration) {
+        this(title, duration);
+        this.id = id;
+    }
+
 
     public Film(String title) {
         this.title = title;

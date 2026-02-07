@@ -4,20 +4,32 @@ public class User {
     private int id;
     private String username;
     private String password;
-    private String role;
+    private Role role;
 
+
+    public User() {
+        this.role = Role.USER;
+    }
     public User(String username) {
         setName(username);
+        this.role = Role.USER;
     }
 
     public User(String name, String password) {
         setName(name);
         setSurname(password);
+        this.role = Role.USER;
     }
 
     public User(int id, String name, String password) {
         this(name, password);
         setId(id);
+        this.role = Role.USER;
+    }
+
+    public User(int id, String name, String password, Role role) {
+        this(id, name, password);
+        this.role = role;
     }
 
     public int getId() {
@@ -44,6 +56,12 @@ public class User {
         this.password = password;
     }
 
+
+    public Role getRole() {return role;}
+
+    public void setRole(Role role) {this.role = role;}
+
+    public boolean isAdmin() {return role == Role.ADMIN;}
 
     @Override
     public String toString() {

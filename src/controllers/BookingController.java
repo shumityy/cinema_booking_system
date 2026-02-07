@@ -5,14 +5,17 @@ import models.Booking;
 import models.Film;
 import models.User;
 import repositories.interfaces.IBookingRepository;
+import repositories.interfaces.ISeatRepository;
 
 import java.util.List;
 
 
 public class BookingController implements IBookingController {
     private final IBookingRepository bookingRepo;
-    public BookingController(IBookingRepository bookingRepo) {
+    private final ISeatRepository seatRepo;
+    public BookingController(IBookingRepository bookingRepo, ISeatRepository seatRepo) {
         this.bookingRepo = bookingRepo;
+        this.seatRepo = seatRepo;
     }
     public String getFullBooking() {
         List<Booking> bookings = bookingRepo.getFullBooking();
@@ -23,8 +26,12 @@ public class BookingController implements IBookingController {
 
         return response.toString();
     }
-    public String addBooking(String user_username, String film_title, double total_price) {
-        Booking booking = new Booking(new User(user_username), new Film(film_title), total_price);
+    public String addBooking(String user_username, String film_title, double total_price, int seatId) {
+        if (!seatRepo.isSeatFree(seatId)) {
+            return " Seat is already booked!";
+        }
+        seatRepo.bookSeat(seatId);
+        Booking booking = new Booking(new User(user_username), new Film(film_title), total_price, seatId);
 
         boolean created = bookingRepo.addBooking(booking);
 
