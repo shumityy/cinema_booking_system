@@ -4,9 +4,10 @@ public class User {
     private int id;
     private String username;
     private String password;
+    private String role;
 
-    public User() {
-
+    public User(String username) {
+        setName(username);
     }
 
     public User(String name, String password) {
@@ -48,7 +49,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + username + '\'' +
-                ", surname='" + password + "'";
+                ", name='" + username + "'";
     }
 }

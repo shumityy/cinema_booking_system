@@ -45,7 +45,7 @@ public class FilmRepository implements IFilmRepository {
 
         try {
             con = db.getConnection();
-            String sql = "SELECT id,title,duration FROM users WHERE id = ?";
+            String sql = "SELECT id,title,duration FROM films WHERE id = ?";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, id);
@@ -62,5 +62,22 @@ public class FilmRepository implements IFilmRepository {
         }
 
         return null;
+    }
+    //FOR ADMIN
+    public void addFilm(String title, int duration) {
+
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql = "INSERT INTO film(title, duration) VALUES (?,?)";
+            PreparedStatement ps = con.prepareStatement(sql);
+
+            ps.setString(1, title);
+            ps.setInt(2, duration);
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("sql error: " + e.getMessage());
+        }
     }
 }

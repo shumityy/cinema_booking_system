@@ -4,7 +4,7 @@ public class Film {
     private int id;
     private String title;
     private int duration;
-    private String schedule;
+    private String category;
 
     public Film(int id, String title, int duration) {
         this.id = id;
@@ -12,9 +12,8 @@ public class Film {
         this.duration = duration;
     }
 
-    public Film(String title, int duration) {
+    public Film(String title) {
         this.title = title;
-        this.duration = duration;
     }
 
     public String getTitle() {
@@ -25,12 +24,9 @@ public class Film {
         return duration;
     }
 
-    public String getSchedule() {
-        return schedule;
-    }
 
     @Override
     public String toString() {
-        return title + " " + duration;
+        return title;
     }
 }

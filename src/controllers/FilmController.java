@@ -26,6 +26,6 @@ public class FilmController implements IFilmController {
     public String getFilm(int id) {
         Film film = repo.getFilm(id);
 
-        return (film == null ? "User was not found!" : film.toString());
+        return (film == null ? "Film was not found!" : film.toString());
     }
 }
