@@ -42,6 +42,7 @@ public class UserMenu {
                     break;
                 case 2:
                     bookingMenu();
+                    break;
                 case 3:
                     if (user.isAdmin()) {
                         addFilmMenu();
@@ -50,9 +51,6 @@ public class UserMenu {
                     System.out.println("Logged out.");
                     return;
 
-                case 4:
-                    System.out.println("Logged out.");
-                    return;
 
                 default:
                     System.out.println("Logged out.");
