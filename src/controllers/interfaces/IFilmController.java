@@ -5,5 +5,7 @@ public interface IFilmController {
     String getFilm(int id);
     String getAllFilms();
     String addFilm(User user, String title, int duration);
+    String updateFilmDuration(User user, int filmId, int duration);
+    String deleteFilm(User user, int filmId);
 }
 

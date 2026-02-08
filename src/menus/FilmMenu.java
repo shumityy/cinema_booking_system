@@ -23,8 +23,10 @@ public class FilmMenu {
         System.out.println();
         System.out.println("Welcome, " + user.getUsername());
         System.out.println("1. Select Movies");
-        if (user.isAdmin()) { System.out.println("2. Admin: Add new film");
-            System.out.println("3. Logout");
+        if (user.isAdmin()) { System.out.println("2. Add new film");
+            System.out.println("3. Update film duration");
+            System.out.println("4. Delete film");
+            System.out.println("5. Logout");
         } else {
             System.out.println("2. Logout");
         }
@@ -47,8 +49,22 @@ public class FilmMenu {
                     }
                     System.out.println("Logged out.");
                     return;
-
                 case 3:
+                    if (user.isAdmin()) {
+                        updateFilmDurationMenu();
+                        break;
+                    }
+                    System.out.println("Logged out.");
+                    return;
+                case 4:
+                    if (user.isAdmin()) {
+                        deleteFilmMenu();
+                        break;
+                    }
+                    System.out.println("Logged out.");
+                    return;
+
+                case 5:
                     System.out.println("Logged out.");
                     return;
 
@@ -80,6 +96,23 @@ public class FilmMenu {
         int duration = scanner.nextInt();
 
         String result = controller.addFilm(user, title, duration);
+        System.out.println(result);
+    }
+    private void updateFilmDurationMenu() {
+        System.out.print("Film ID: ");
+        int filmId = scanner.nextInt();
+
+        System.out.print("New duration (minutes): ");
+        int duration = scanner.nextInt();
+
+        String result = controller.updateFilmDuration(user, filmId, duration);
+        System.out.println(result);
+    }
+    private void deleteFilmMenu() {
+        System.out.print("Film ID to delete: ");
+        int filmId = scanner.nextInt();
+
+        String result = controller.deleteFilm(user, filmId);
         System.out.println(result);
     }
 }

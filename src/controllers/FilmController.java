@@ -29,6 +29,7 @@ public class FilmController implements IFilmController {
 
         return (film == null ? "Film was not found!" : film.toString());
     }
+    //admin
     public String addFilm(User user, String title, int duration) {
         if (user == null || !user.isAdmin()) {
             return "Access denied. Admin only.";
@@ -43,5 +44,18 @@ public class FilmController implements IFilmController {
 
         boolean created = repo.addFilm(new Film(title, duration));
         return created ? "Film added successfully!" : "Film adding failed!";
+    }
+    public String updateFilmDuration(User user, int filmId, int duration) {
+        if (!user.isAdmin()) return "Access denied. Admin only.";
+        if (duration <= 0) return "Invalid duration.";
+
+        boolean ok = repo.updateFilmDuration(filmId, duration);
+        return ok ? "Film updated successfully!" : "Update failed.";
+    }
+    public String deleteFilm(User user, int filmId) {
+        if (!user.isAdmin()) return "Access denied. Admin only.";
+
+        boolean ok = repo.deleteFilm(filmId);
+        return ok ? "Film deleted successfully!" : "Delete failed.";
     }
 }

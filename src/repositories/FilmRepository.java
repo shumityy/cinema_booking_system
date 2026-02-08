@@ -83,4 +83,28 @@ public class FilmRepository implements IFilmRepository {
             return false;
         }
     }
+    public boolean updateFilmDuration(int id, int duration) {
+        try (Connection con = db.getConnection()) {
+            String sql = "UPDATE films SET duration = ? WHERE id = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, duration);
+            st.setInt(2, id);
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("sql error: " + e.getMessage());
+            return false;
+        }
+    }
+    @Override
+    public boolean deleteFilm(int id) {
+        try (Connection con = db.getConnection()) {
+            String sql = "DELETE FROM films WHERE id = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1, id);
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("sql error: " + e.getMessage());
+            return false;
+        }
+    }
 }

@@ -9,4 +9,6 @@ public interface IFilmRepository {
     List<Film> getAllFilms();
 
     boolean addFilm(Film film);
+    boolean updateFilmDuration(int id, int duration);
+    boolean deleteFilm(int id);
 }
