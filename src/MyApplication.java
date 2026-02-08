@@ -95,7 +95,7 @@ public class MyApplication {
         }
 
         System.out.println("Login successful!");
-        FilmMenu filmMenu = new FilmMenu(user, filmController, ticketController);
+        FilmMenu filmMenu = new FilmMenu(user, filmController, ticketController, userController);
         filmMenu.start();
     }
 }

@@ -45,7 +45,7 @@ public class UserRepository implements IUserRepository {
 
         try {
             con = db.getConnection();
-            String sql = "SELECT id,username,password FROM users WHERE id = ?";
+            String sql = "SELECT id,username,password,role FROM users WHERE id = ?";
             PreparedStatement st = con.prepareStatement(sql);
 
             st.setInt(1, id);
@@ -54,7 +54,8 @@ public class UserRepository implements IUserRepository {
             if (rs.next()) {
                 return new User(rs.getInt("id"),
                         rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role"))
                 );
             }
         } catch (SQLException e) {
@@ -70,7 +71,7 @@ public class UserRepository implements IUserRepository {
 
         try {
             con = db.getConnection();
-            String sql = "SELECT id,username,password FROM users";
+            String sql = "SELECT id,username,password,role FROM users";
             Statement st = con.createStatement();
 
             ResultSet rs = st.executeQuery(sql);
@@ -78,7 +79,8 @@ public class UserRepository implements IUserRepository {
             while (rs.next()) {
                 User user = new User(rs.getInt("id"),
                         rs.getString("username"),
-                        rs.getString("password")
+                        rs.getString("password"),
+                        Role.valueOf(rs.getString("role"))
                 );
 
                 users.add(user);
@@ -117,5 +119,23 @@ public class UserRepository implements IUserRepository {
         }
 
         return null;
+    }
+    @Override
+    public boolean deleteUser(int id) {
+        Connection con = null;
+
+        try {
+            con = db.getConnection();
+            String sql = "DELETE FROM users WHERE id = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setInt(1, id);
+
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("sql error: " + e.getMessage());
+        }
+
+        return false;
     }
 }

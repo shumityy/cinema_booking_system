@@ -8,4 +8,5 @@ public interface IUserRepository {
     User getUser(int id);
     List<User> getAllUsers();
     User login(String name, String surname);
+    boolean deleteUser(int id);
 }

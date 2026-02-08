@@ -2,6 +2,7 @@ package menus;
 
 import controllers.TicketController;
 import controllers.interfaces.IFilmController;
+import controllers.interfaces.IUserController;
 import models.User;
 import java.util.Scanner;
 
@@ -12,11 +13,13 @@ public class FilmMenu {
     private final IFilmController controller;
 
     private final TicketController ticketController;
+    private final IUserController userController;
 
-    public FilmMenu(User user, IFilmController controller, TicketController ticketController) {
+    public FilmMenu(User user, IFilmController controller, TicketController ticketController, IUserController userController) {
         this.user = user;
         this.controller = controller;
         this.ticketController =  ticketController;
+        this.userController = userController;
     }
 
     private void menu() {
@@ -26,7 +29,8 @@ public class FilmMenu {
         if (user.isAdmin()) { System.out.println("2. Add new film");
             System.out.println("3. Update film duration");
             System.out.println("4. Delete film");
-            System.out.println("5. Logout");
+            System.out.println("5. Delete user");
+            System.out.println("6. Logout");
         } else {
             System.out.println("2. Logout");
         }
@@ -63,8 +67,14 @@ public class FilmMenu {
                     }
                     System.out.println("Logged out.");
                     return;
-
                 case 5:
+                    if (user.isAdmin()) {
+                        deleteUserMenu();
+                        break;
+                    }
+                    System.out.println("Logged out.");
+                    return;
+                case 6:
                     System.out.println("Logged out.");
                     return;
 
@@ -113,6 +123,13 @@ public class FilmMenu {
         int filmId = scanner.nextInt();
 
         String result = controller.deleteFilm(user, filmId);
+        System.out.println(result);
+    }
+    private void deleteUserMenu() {
+        System.out.print("Enter user ID to delete: ");
+        int userId = scanner.nextInt();
+
+        String result = userController.deleteUser(user, userId);
         System.out.println(result);
     }
 }
