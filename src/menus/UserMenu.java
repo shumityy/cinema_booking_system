@@ -2,6 +2,7 @@ package menus;
 
 import controllers.interfaces.IBookingController;
 import controllers.interfaces.IFilmController;
+import controllers.interfaces.IUserController;
 import models.User;
 import java.util.Scanner;
 
@@ -11,11 +12,13 @@ public class UserMenu {
     private final User user;
     private final IFilmController controller;
     private final IBookingController bookingController;
+    private final IUserController userController;
 
-    public UserMenu(User user, IFilmController controller, IBookingController bookingController) {
+    public UserMenu(User user, IFilmController controller, IBookingController bookingController, IUserController userController) {
         this.user = user;
         this.controller = controller;
         this.bookingController = bookingController;
+        this.userController = userController;
     }
 
     private void menu() {
@@ -23,8 +26,11 @@ public class UserMenu {
         System.out.println("Welcome, " + user.getUsername());
         System.out.println("1. Select Movies");
         System.out.println("2. View Bookings");
-        if (user.isAdmin()) { System.out.println("3. Admin: Add new film");
-            System.out.println("4. Logout");
+        if (user.isAdmin()) { System.out.println("3.Add new film");
+            System.out.println("4. Update film duration");
+            System.out.println("5. Delete film");
+            System.out.println("6. Delete user");
+            System.out.println("7. Logout");
         } else {
             System.out.println("3. Logout");
         }
@@ -48,6 +54,30 @@ public class UserMenu {
                         addFilmMenu();
                         break;
                     }
+                    System.out.println("Logged out.");
+                    return;
+                case 4:
+                    if (user.isAdmin()) {
+                        updateFilmDurationMenu();
+                        break;
+                    }
+                    System.out.println("Logged out.");
+                    return;
+                case 5:
+                    if (user.isAdmin()) {
+                        deleteFilmMenu();
+                        break;
+                    }
+                    System.out.println("Logged out.");
+                    return;
+                case 6:
+                    if (user.isAdmin()) {
+                        deleteUserMenu();
+                        break;
+                    }
+                    System.out.println("Logged out.");
+                    return;
+                case 7:
                     System.out.println("Logged out.");
                     return;
 
@@ -86,6 +116,30 @@ public class UserMenu {
         int duration = scanner.nextInt();
 
         String result = controller.addFilm(user, title, duration);
+        System.out.println(result);
+    }
+    private void updateFilmDurationMenu() {
+        System.out.print("Film ID: ");
+        int filmId = scanner.nextInt();
+
+        System.out.print("New duration (minutes): ");
+        int duration = scanner.nextInt();
+
+        String result = controller.updateFilmDuration(user, filmId, duration);
+        System.out.println(result);
+    }
+    private void deleteFilmMenu() {
+        System.out.print("Film ID to delete: ");
+        int filmId = scanner.nextInt();
+
+        String result = controller.deleteFilm(user, filmId);
+        System.out.println(result);
+    }
+    private void deleteUserMenu() {
+        System.out.print("Enter user ID to delete: ");
+        int userId = scanner.nextInt();
+
+        String result = userController.deleteUser(user, userId);
         System.out.println(result);
     }
 }

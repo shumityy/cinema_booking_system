@@ -120,4 +120,21 @@ public class UserRepository implements IUserRepository {
 
         return null;
     }
+    public boolean deleteUser(int id) {
+        Connection con = null;
+
+        try {
+            con = db.getConnection();
+            String sql = "DELETE FROM users WHERE id = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+
+            st.setInt(1, id);
+
+            return st.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("sql error: " + e.getMessage());
+        }
+
+        return false;
+    }
 }
