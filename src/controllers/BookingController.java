@@ -3,6 +3,7 @@ package controllers;
 import controllers.interfaces.IBookingController;
 import models.Booking;
 import models.Film;
+import models.Seat;
 import models.User;
 import repositories.interfaces.IBookingRepository;
 import repositories.interfaces.ISeatRepository;
@@ -17,21 +18,17 @@ public class BookingController implements IBookingController {
         this.bookingRepo = bookingRepo;
         this.seatRepo = seatRepo;
     }
-    public String getFullBooking() {
-        List<Booking> bookings = bookingRepo.getFullBooking();
-        StringBuilder response = new StringBuilder();
-        for (Booking booking : bookings) {
-            response.append(booking.toString()).append("\n");
-        }
+    public String getFullBooking(int id) {
+        Booking booking = bookingRepo.getFullBooking(id);
 
-        return response.toString();
+        return (booking == null ? "Booking was not found!" : booking.toString());
     }
-    public String addBooking(String user_username, String film_title, double total_price, int seatId) {
-        if (!seatRepo.isSeatFree(seatId)) {
+    public String addBooking(String user_username, String film_title, int seat, double total_price) {
+        if (!seatRepo.isSeatFree(seat)) {
             return " Seat is already booked!";
         }
-        seatRepo.bookSeat(seatId);
-        Booking booking = new Booking(new User(user_username), new Film(film_title), total_price, seatId);
+        seatRepo.bookSeat(seat);
+        Booking booking = new Booking(new User(user_username), new Film(film_title),new Seat(seat), total_price);
 
         boolean created = bookingRepo.addBooking(booking);
 

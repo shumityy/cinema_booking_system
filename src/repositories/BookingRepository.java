@@ -3,6 +3,7 @@ package repositories;
 import data.IDB;
 import models.Booking;
 import models.Film;
+import models.Seat;
 import models.User;
 import repositories.interfaces.IBookingRepository;
 import java.sql.*;
@@ -16,29 +17,29 @@ public class BookingRepository implements IBookingRepository {
         this.db = db;
     }
 
-    public List<Booking> getFullBooking() {
+    public Booking getFullBooking(int id) {
         Connection con = null;
         try {
             con = db.getConnection();
             String sql = """
                         SELECT b.id, u.username, f.title, s.seat_number, b.total_price
-                        FROM bookings b 
-                        JOIN users u ON b.user_username = u.username
-                        JOIN films f ON b.film_title= f.title
-                        JOIN seats s ON b.seat_id = s.seat_number
+                        FROM bookings b
+                        JOIN users u ON b.user_id = u.id
+                        JOIN films f ON b.film_id = f.id
+                        JOIN seats s ON b.seat_id = s.id
+                        WHERE b.id = ?;
                         """;
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            List<Booking> bookings = new ArrayList<>();
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Booking booking = new Booking(rs.getInt("id"),
+                return new Booking(rs.getInt("id"),
                         new User(rs.getString("username")),
                         new Film(rs.getString("title")),
-                        rs.getInt("seat_id"),
+                        new Seat(rs.getInt("seat_number")),
                         rs.getDouble("total_price"));
-                bookings.add(booking);
             }
-            return bookings;
+            return null;
 
         } catch (SQLException e) {
             System.out.println("sql error: " + e.getMessage());
@@ -50,12 +51,13 @@ public class BookingRepository implements IBookingRepository {
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "INSERT INTO bookings(user_username, film_title, seat_id, total_price) VALUES (?,?,?,?)";
+            String sql = "INSERT INTO bookings(user_id, film_id, seat_id, total_price) VALUES (?,?,?,?)";
             PreparedStatement st = con.prepareStatement(sql);
 
-            st.setString(1, booking.getUser().getUsername());
-            st.setString(2, booking.getFilm().getTitle());
-            st.setDouble(3, booking.getTotalPrice());
+            st.setInt(1, booking.getUser().getId());
+            st.setInt(2, booking.getFilm().getId());
+            st.setInt(3, booking.getSeat().getId());
+            st.setDouble(4, booking.getTotalPrice());
 
             st.execute();
 

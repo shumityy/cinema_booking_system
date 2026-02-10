@@ -6,6 +6,9 @@ public class Seat {
     private int seatNumber;
     private boolean booked;
 
+    public Seat(int seatNumber){
+        this.seatNumber = seatNumber;
+    }
     public Seat(int id, int hallId, int seatNumber, boolean booked) {
         this.id = id;
         this.hallId = hallId;
@@ -33,5 +36,9 @@ public class Seat {
 
     public void setBooked(boolean booked) {
         this.booked = booked;
+    }
+
+    public int getId() {
+        return id;
     }
 }

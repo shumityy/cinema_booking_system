@@ -1,23 +1,24 @@
 package models;
 
-import java.util.List;
 
 public class Booking {
     private int id;
     private User user;
     private Film film;
-    private int seatId;
+    private Seat seat;
     private double totalPrice;
 
-    public Booking(int id, User user, Film film, int seatId, double totalPrice) {
+    public Booking(int id, User user, Film film, Seat seat, double totalPrice) {
         this.id = id;
         this.user = user;
         this.film = film;
+        this.seat = seat;
         this.totalPrice = totalPrice;
     }
-    public Booking(User user, Film film, double totalPrice, int seatId) {
+    public Booking(User user, Film film, Seat seat, double totalPrice) {
         this.user = user;
         this.film = film;
+        this.seat = seat;
         this.totalPrice = totalPrice;
     }
     public User getUser() {
@@ -29,6 +30,7 @@ public class Booking {
     public double getTotalPrice() {
         return totalPrice;
     }
+    public Seat getSeat() { return seat; }
     @Override
     public String toString() {
         return id + " " + user.getUsername() + " " + film.getTitle() + " " + totalPrice;

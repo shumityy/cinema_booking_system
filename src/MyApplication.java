@@ -25,8 +25,6 @@ public class MyApplication {
         System.out.println();
         System.out.println("Welcome to My Application");
         System.out.println("Select option:");
-        //System.out.println("1. Get all users");
-        //System.out.println("2. Get user by id");
         System.out.println("1. Register");
         System.out.println("2. Login");
         System.out.println("0. Exit");
@@ -41,8 +39,6 @@ public class MyApplication {
                 int option = scanner.nextInt();
 
                 switch (option) {
-                    //case 1: getAllUsersMenu(); break;
-                    //case 2: getUserByIdMenu(); break;
                     case 1: registerMenu(); break;
                     case 2: loginMenu(); break;
                     default: return;

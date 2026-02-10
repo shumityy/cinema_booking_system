@@ -24,6 +24,8 @@ public class Film {
         return title;
     }
 
+    public int getId() { return id; }
+
     public int getDuration() {
         return duration;
     }

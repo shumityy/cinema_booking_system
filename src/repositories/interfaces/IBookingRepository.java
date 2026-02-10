@@ -5,6 +5,6 @@ import models.Booking;
 import java.util.List;
 
 public interface IBookingRepository {
-    List<Booking> getFullBooking();
+    Booking getFullBooking(int id);
     boolean addBooking(Booking booking);
 }

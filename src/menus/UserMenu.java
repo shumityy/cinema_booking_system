@@ -98,12 +98,14 @@ public class UserMenu {
         int option = scanner.nextInt();
         System.out.println("What seat you want: ");
         int seat =  scanner.nextInt();
-        String response2 = bookingController.addBooking(user.getUsername(), controller.getFilm(option), 500, seat);
+        String response2 = bookingController.addBooking(user.getUsername(), controller.getFilm(option), seat, 500);
         System.out.println(response2);
         System.out.println();
     }
     public void bookingMenu() {
-        String response = bookingController.getFullBooking();
+        System.out.println("Bookind ID: ");
+        int id = scanner.nextInt();
+        String response = bookingController.getFullBooking(id);
         System.out.println(response);
     }
     private void addFilmMenu() {
