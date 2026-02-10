@@ -18,9 +18,9 @@ public class FilmController implements IFilmController {
         List<Film> films = repo.getAllFilms();
 
         StringBuilder response = new StringBuilder();
-        for (Film film : films) {
-            response.append(film.toString()).append("\n");
-        }
+        films.forEach(film ->
+                response.append(film.toString()).append("\n")
+        );
         return response.toString();
     }
     public String getFilm(int id) {
@@ -42,5 +42,18 @@ public class FilmController implements IFilmController {
 
         boolean created = repo.addFilm(new Film(title, duration));
         return created ? "Film added successfully!" : "Film adding failed!";
+    }
+    public String updateFilmDuration(User user, int filmId, int duration) {
+        if (!user.isAdmin()) return "Access denied. Admin only.";
+        if (duration <= 0) return "Invalid duration.";
+
+        boolean ok = repo.updateFilmDuration(filmId, duration);
+        return ok ? "Film updated successfully!" : "Update failed.";
+    }
+    public String deleteFilm(User user, int filmId) {
+        if (!user.isAdmin()) return "Access denied. Admin only.";
+
+        boolean ok = repo.deleteFilm(filmId);
+        return ok ? "Film deleted successfully!" : "Delete failed.";
     }
 }

@@ -41,4 +41,20 @@ public class UserController implements IUserController {
     public User login(String name, String surname) {
         return repo.login(name, surname);
     }
+    public String deleteUser(User admin, int userId) {
+        if (admin == null || !admin.isAdmin()) {
+            return "Access denied. Admin only.";
+        }
+
+        if (userId <= 0) {
+            return "Invalid user ID.";
+        }
+
+        if (admin.getId() == userId) {
+            return "You cannot delete your own account.";
+        }
+
+        boolean deleted = repo.deleteUser(userId);
+        return deleted ? "User deleted successfully!" : "User not found or delete failed.";
+    }
 }

@@ -7,5 +7,6 @@ public interface IUserController {
     User login(String username, String password);
     String getUser(int id);
     String getAllUsers();
+    String deleteUser(User admin, int userId);
 }
 
