@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class PostgresDB implements IDB {
+
+    private static PostgresDB instance;
+
     private String host;
     private String username;
     private String password;
@@ -12,11 +15,23 @@ public class PostgresDB implements IDB {
 
     private Connection connection;
 
-    public PostgresDB(String host, String username, String password, String dbName) {
+    private PostgresDB(String host, String username, String password, String dbName) {
         setHost(host);
         setUsername(username);
         setPassword(password);
         setDbName(dbName);
+    }
+
+    public static synchronized PostgresDB getInstance(
+            String host,
+            String username,
+            String password,
+            String dbName
+    ) {
+        if (instance == null) {
+            instance = new PostgresDB(host, username, password, dbName);
+        }
+        return instance;
     }
 
     public Connection getConnection() {

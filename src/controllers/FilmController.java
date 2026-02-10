@@ -21,7 +21,6 @@ public class FilmController implements IFilmController {
         for (Film film : films) {
             response.append(film.toString()).append("\n");
         }
-
         return response.toString();
     }
     public String getFilm(int id) {
