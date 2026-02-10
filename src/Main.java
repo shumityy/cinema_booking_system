@@ -13,7 +13,7 @@ import repositories.interfaces.IUserRepository;
 public class Main {
 
     public static void main(String[] args) {
-        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "postgres", "0000", "cinema");
+        IDB db = PostgresDB.getInstance("jdbc:postgresql://localhost:5432", "postgres", "0000", "cinema");
         IUserRepository userRepo = new UserRepository(db);
         IFilmRepository filmRepo = new FilmRepository(db);
         IBookingRepository bookingRepo = new BookingRepository(db);
