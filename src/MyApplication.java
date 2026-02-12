@@ -23,7 +23,7 @@ public class MyApplication {
 
     private void mainMenu() {
         System.out.println();
-        System.out.println("Welcome to My Application");
+        System.out.println("Welcome to Cinema !");
         System.out.println("Select option:");
         System.out.println("1. Register");
         System.out.println("2. Login");
