@@ -6,7 +6,7 @@ import controllers.interfaces.IFilmController;
 import controllers.interfaces.IUserController;
 import menus.UserMenu;
 import models.User;
-
+import repositories.interfaces.IGenreRepository;
 
 public class MyApplication {
     private final Scanner scanner = new Scanner(System.in);
@@ -14,11 +14,16 @@ public class MyApplication {
     private final IUserController userController;
     private final IFilmController filmController;
     private final IBookingController bookingController;
+    private final IGenreRepository genreRepository; // NEW
 
-    public MyApplication(IUserController userController, IFilmController filmController, IBookingController bookingController) {
+    public MyApplication(IUserController userController,
+                         IFilmController filmController,
+                         IBookingController bookingController,
+                         IGenreRepository genreRepository) { // NEW
         this.userController = userController;
         this.filmController = filmController;
         this.bookingController = bookingController;
+        this.genreRepository = genreRepository;
     }
 
     private void mainMenu() {
@@ -54,19 +59,6 @@ public class MyApplication {
         }
     }
 
-    public void getAllUsersMenu() {
-        String response = userController.getAllUsers();
-        System.out.println(response);
-    }
-
-    public void getUserByIdMenu() {
-        System.out.println("Please enter id");
-
-        int id = scanner.nextInt();
-        String response = userController.getUser(id);
-        System.out.println(response);
-    }
-
     public void registerMenu() {
         System.out.println("Please enter username");
         String username = scanner.next();
@@ -76,6 +68,7 @@ public class MyApplication {
         String response = userController.register(username, password);
         System.out.println(response);
     }
+
     public void loginMenu() {
         System.out.println("Please enter username:");
         String username = scanner.next();
@@ -91,7 +84,7 @@ public class MyApplication {
         }
 
         System.out.println("Login successful!");
-        UserMenu filmMenu = new UserMenu(user, filmController, bookingController, userController);
-        filmMenu.start();
+        UserMenu menu = new UserMenu(user, filmController, bookingController, userController, genreRepository); // NEW
+        menu.start();
     }
 }

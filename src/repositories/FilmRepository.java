@@ -4,105 +4,124 @@ import data.IDB;
 import models.Film;
 import repositories.interfaces.IFilmRepository;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilmRepository implements IFilmRepository {
+public abstract class FilmRepository implements IFilmRepository {
     private final IDB db;
 
-    public FilmRepository(IDB db) { this.db = db; }
-
-    public List<Film> getAllFilms() {
-        Connection con = null;
-
-        try {
-            con = db.getConnection();
-            String sql = "SELECT id,title,duration FROM films";
-            Statement st = con.createStatement();
-
-            ResultSet rs = st.executeQuery(sql);
-            List<Film> films = new ArrayList<>();
-            while (rs.next()) {
-                Film film = new Film(rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getInt("duration")
-                );
-
-                films.add(film);
-            }
-
-            return films;
-        } catch (SQLException e) {
-            System.out.println("sql error: " + e.getMessage());
-        }
-
-        return null;
+    public FilmRepository(IDB db) {
+        this.db = db;
     }
 
+    @Override
     public Film getFilm(int id) {
-        Connection con = null;
+        String sql = """
+                SELECT f.id, f.title, f.duration, f.genre_id, g.name AS genre_name
+                FROM films f
+                LEFT JOIN genres g ON g.id = f.genre_id
+                WHERE f.id = ?
+                """;
 
-        try {
-            con = db.getConnection();
-            String sql = "SELECT id,title,duration FROM films WHERE id = ?";
-            PreparedStatement st = con.prepareStatement(sql);
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setInt(1, id);
 
-            ResultSet rs = st.executeQuery();
-            if (rs.next()) {
-                return new Film(rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getInt("duration")
-                );
+            try (ResultSet rs = st.executeQuery()) {
+                if (rs.next()) {
+                    return new Film(
+                            rs.getString("title"),
+                            rs.getInt("duration")
+                    );
+                }
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("sql error: " + e.getMessage());
         }
 
         return null;
     }
-    //FOR ADMIN
-    public boolean addFilm(Film film) {
-        Connection con = null;
 
-        try {
-            con = db.getConnection();
-            String sql = "INSERT INTO films(title, duration) VALUES (?, ?)";
-            PreparedStatement st = con.prepareStatement(sql);
+    @Override
+    public List<Film> getAllFilms() {
+        List<Film> films = new ArrayList<>();
+
+        String sql = """
+                SELECT f.id, f.title, f.duration, f.genre_id, g.name AS genre_name
+                FROM films f
+                LEFT JOIN genres g ON g.id = f.genre_id
+                ORDER BY f.id
+                """;
+
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
+
+            while (rs.next()) {
+                films.add(new Film(
+                        rs.getString("title"),
+                        rs.getInt("duration")
+                ));
+            }
+        } catch (Exception e) {
+            System.out.println("sql error: " + e.getMessage());
+        }
+
+        return films;
+    }
+
+    @Override
+    public boolean addFilm(Film film) {
+        String sql = "INSERT INTO films(title, duration, genre_id) VALUES (?, ?, ?)";
+
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
 
             st.setString(1, film.getTitle());
             st.setInt(2, film.getDuration());
+            st.setInt(3, film.getGenreId());
 
-            st.execute();
-            return true;
+            return st.executeUpdate() > 0;
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             System.out.println("sql error: " + e.getMessage());
             return false;
         }
     }
+
+    @Override
     public boolean updateFilmDuration(int id, int duration) {
-        try (Connection con = db.getConnection()) {
-            String sql = "UPDATE films SET duration = ? WHERE id = ?";
-            PreparedStatement st = con.prepareStatement(sql);
+        String sql = "UPDATE films SET duration = ? WHERE id = ?";
+
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
             st.setInt(1, duration);
             st.setInt(2, id);
+
             return st.executeUpdate() > 0;
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             System.out.println("sql error: " + e.getMessage());
             return false;
         }
     }
+
     @Override
     public boolean deleteFilm(int id) {
-        try (Connection con = db.getConnection()) {
-            String sql = "DELETE FROM films WHERE id = ?";
-            PreparedStatement st = con.prepareStatement(sql);
+        String sql = "DELETE FROM films WHERE id = ?";
+
+        try (Connection con = db.getConnection();
+             PreparedStatement st = con.prepareStatement(sql)) {
+
             st.setInt(1, id);
             return st.executeUpdate() > 0;
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             System.out.println("sql error: " + e.getMessage());
             return false;
         }
