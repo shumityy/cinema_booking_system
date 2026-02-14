@@ -28,7 +28,7 @@ public class FilmController implements IFilmController {
 
         return (film == null ? "Film was not found!" : film.toString());
     }
-    public String addFilm(User user, String title, int duration) {
+    public String addFilm(User user, String title, int duration, int genreId) {
         if (user == null || !user.isAdmin()) {
             return "Access denied. Admin only.";
         }
